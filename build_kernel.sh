@@ -47,11 +47,28 @@ TARGET_SOC=s5e9925 \
 #build kernel image
 build_kernel(){
     cd "${RDIR}"
-    make ${ARGS} clean && make ${ARGS} mrproper
+    #make ${ARGS} clean && make ${ARGS} mrproper
     make ${ARGS} s5e9925-r11sxxx_defconfig custom.config version.config
     make ${ARGS} menuconfig
     make ${ARGS}|| exit 1
     cp ${RDIR}/arch/arm64/boot/Image* ${RDIR}/build
 }
 
+#build boot.img
+build_boot() {    
+    rm -f ${RDIR}/AIK-Linux/split_img/boot.img-kernel ${RDIR}/AIK-Linux/boot.img
+    cp "${RDIR}/build/Image" ${RDIR}/AIK-Linux/split_img/boot.img-kernel
+    mkdir -p ${RDIR}/AIK-Linux/ramdisk/{debug_ramdisk,dev,metadata,mnt,proc,second_stage_resources,sys}
+    cd ${RDIR}/AIK-Linux && ./repackimg.sh --nosudo && mv image-new.img ${RDIR}/build/boot.img
+}
+
+#build odin flashable tar
+build_tar(){
+    cd ${RDIR}/build
+    tar -cvf "KernelSU-Next-SM-S711B-${BUILD_KERNEL_VERSION}.tar" boot.img && rm boot.img
+    echo -e "\n[i] Build Finished..!\n" && cd ${RDIR}
+}
+
 build_kernel
+build_boot
+build_tar
