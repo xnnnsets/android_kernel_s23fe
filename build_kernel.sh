@@ -51,7 +51,7 @@ build_kernel(){
     make ${ARGS} s5e9925-r11sxxx_defconfig custom.config version.config
     make ${ARGS} menuconfig
     make ${ARGS}|| exit 1
-    cp ${RDIR}/out/arch/arm64/boot/Image* ${RDIR}/build
+    cp ${RDIR}/arch/arm64/boot/Image* ${RDIR}/build
 }
 
 build_kernel
