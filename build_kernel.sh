@@ -40,7 +40,7 @@ TARGET_SOC=s5e9925 \
 build_kernel(){
     cd "${RDIR}"
     make ${ARGS} clean && make ${ARGS} mrproper
-    make ${ARGS} s5e9925-r11sxxx_defconfig
+    make ${ARGS} s5e9925-r11sxxx_defconfig custom.config
     make ${ARGS} menuconfig
     make ${ARGS}|| exit 1
     cp ${RDIR}/out/arch/arm64/boot/Image* ${RDIR}/build
