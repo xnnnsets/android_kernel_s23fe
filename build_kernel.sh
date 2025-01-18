@@ -16,11 +16,6 @@ export ANDROID_MAJOR_VERSION=s
 export PATH=${RDIR}/toolchains/clang-r416183b/bin:$PATH
 export BUILD_CROSS_COMPILE="${RDIR}/toolchains/gcc/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-"
 
-#output dir
-if [ ! -d "${RDIR}/out" ]; then
-    mkdir -p "${RDIR}/out"
-fi
-
 #build dir
 if [ ! -d "${RDIR}/build" ]; then
     mkdir -p "${RDIR}/build"
@@ -30,8 +25,6 @@ fi
 
 #build options
 export ARGS="
--C $(pwd) \
-O=$(pwd)/out \
 -j$(nproc) \
 ARCH=arm64 \
 CROSS_COMPILE=${BUILD_CROSS_COMPILE} \
