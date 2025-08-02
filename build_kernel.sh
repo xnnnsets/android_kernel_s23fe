@@ -1,7 +1,12 @@
 #!/bin/bash
 
-#init submodules
-git submodule init && git submodule update
+# check for INCLUDE_NEXT
+if [ "$INCLUDE_NEXT" = "true" ]; then
+    echo "[i] Including KernelSU-Next..."
+    curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s next
+else
+    echo "[i] Skipping KernelSU-Next setup."
+fi
 
 #main variables
 export ARCH=arm64
@@ -29,7 +34,7 @@ if [ -z "$BUILD_KERNEL_VERSION" ]; then
 fi
 
 #setting up localversion
-echo -e "CONFIG_LOCALVERSION_AUTO=n\nCONFIG_LOCALVERSION=\"-ravindu644-${BUILD_KERNEL_VERSION}\"\n" > "${RDIR}/arch/arm64/configs/version.config"
+echo -e "CONFIG_LOCALVERSION_AUTO=n\nCONFIG_LOCALVERSION=\"-${BUILD_KERNEL_VERSION}\"\n" > "${RDIR}/arch/arm64/configs/version.config"
 
 #build options
 export ARGS="
