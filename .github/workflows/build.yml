@@ -52,6 +52,6 @@ jobs:
           name: "KernelSU-Next-SM-S711B-${{ github.event.inputs.tag }}"
           draft: false
           prerelease: false
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "build/*.tar"
           body: "Commit SHA: ${{ github.sha }}"
