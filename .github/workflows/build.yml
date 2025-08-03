@@ -12,6 +12,11 @@ on:
         required: true
         type: boolean
         default: true
+      include_susfs:
+        description: 'Include Susfs?'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -35,10 +40,22 @@ jobs:
           echo "BUILD_KERNEL_VERSION=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
           echo "INCLUDE_NEXT=${{ github.event.inputs.include_next }}" >> $GITHUB_ENV
 
+      - name: Include Susfs Patch
+        if: ${{ github.event.inputs.include_susfs }}
+        run: |
+          echo "clone repo susfs"
+          git clone https://gitlab.com/simonpunk/susfs4ksu -b gki-android12-5.10 susfs4ksu
+          cd susfs4ksu
+          cp -r -v ./kernel_patches/fs/* ../fs/
+          cp -r -v ./kernel_patches/include/linux/* ../include/linux/
+          cp -r -v ./kernel_patches/50_add_susfs_in_gki-android12-5.10.patch ../50_add_susfs_in_gki-android12-5.10.patch
+          cd ..
+          echo "Patch susfs"
+          patch -p1 --forward < 50_add_susfs_in_gki-android12-5.10.patch
+
       - name: Compile Kernel
         run: |
           bash build_kernel.sh ${{ github.event.inputs.include_next }}
-
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:

@@ -3,7 +3,7 @@
 # check for INCLUDE_NEXT
 if [ "$INCLUDE_NEXT" = "true" ]; then
     echo "[i] Including KernelSU-Next..."
-    curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s next
+    curl -LSs "https://raw.githubusercontent.com/xnnnsets/KernelSU-Next/next/kernel/setup.sh" | bash -s susfs-1.5.9
 else
     echo "[i] Skipping KernelSU-Next setup."
 fi
@@ -11,7 +11,7 @@ fi
 #main variables
 export ARCH=arm64
 export RDIR="$(pwd)"
-export KBUILD_BUILD_USER="@ravindu644"
+export KBUILD_BUILD_USER="@amsyu"
 export TARGET_SOC=s5e9925
 export LLVM=1 LLVM_IAS=1
 export PLATFORM_VERSION=12
@@ -30,7 +30,7 @@ fi
 
 #dev
 if [ -z "$BUILD_KERNEL_VERSION" ]; then
-    export BUILD_KERNEL_VERSION="dev"
+    export BUILD_KERNEL_VERSION="devi"
 fi
 
 #setting up localversion
