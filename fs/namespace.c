@@ -27,13 +27,10 @@
 #include <linux/memblock.h>
 #include <linux/task_work.h>
 #include <linux/sched/task.h>
+#include <linux/fslog.h>
 #include <uapi/linux/mount.h>
 #include <linux/fs_context.h>
 #include <linux/shmem_fs.h>
-#include <linux/fslog.h>
-#ifdef CONFIG_KDP_NS
-#include <linux/kdp.h>
-#endif
 
 #include "pnode.h"
 #include "internal.h"
@@ -3712,11 +3709,7 @@ struct mnt_namespace *copy_mnt_ns(unsigned long flags, struct mnt_namespace *ns,
 	copy_flags = CL_COPY_UNBINDABLE | CL_EXPIRE;
 	if (user_ns != ns->user_ns)
 		copy_flags |= CL_SHARED_TO_SLAVE;
-#ifdef CONFIG_KDP_NS
-	new = copy_tree(old, ((struct kdp_mount *)old)->mnt->mnt_root, copy_flags);
-#else
 	new = copy_tree(old, old->mnt.mnt_root, copy_flags);
-#endif
 	if (IS_ERR(new)) {
 		namespace_unlock();
 		free_mnt_ns(new_ns);
